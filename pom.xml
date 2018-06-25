@@ -24,7 +24,7 @@
     <groupId>com.jaxio.celerio</groupId>
     <artifactId>celerio-parent</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.24-SNAPSHOT</version>
+    <version>4.0.24-envers-capsi</version>
 
     <url>https://github.com/jaxio/celerio</url>
     <description>Celerio is a code generator tool for data-driven application.</description>
