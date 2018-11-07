@@ -16,6 +16,8 @@
 
 package com.jaxio.celerio.factory.conventions;
 
+import com.jaxio.celerio.configuration.database.Table;
+import com.jaxio.celerio.configuration.database.support.SqlUtil;
 import com.jaxio.celerio.model.Attribute;
 import com.jaxio.celerio.model.Entity;
 import com.jaxio.celerio.model.support.AuditEntityAttribute;
@@ -23,6 +25,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.google.common.collect.Lists.newArrayList;
+
+import java.util.Map;
 
 @Slf4j
 public class AuditEntityConvention {
@@ -35,7 +39,8 @@ public class AuditEntityConvention {
     private final Entity e;
     @Getter
     private final boolean audited;
-
+    static boolean debug = true ;
+    
     public AuditEntityConvention(Entity e) {
         this.e = e;
         auditEntityAttribute = attributes(e);
@@ -43,14 +48,28 @@ public class AuditEntityConvention {
     }
 
     private boolean buildIsAudited() {
-        boolean audited = auditEntityAttribute.hasAttribute();
+        boolean audited = hasAuditTable();
         if (audited) {
-            log.info(e.getName() + ": assumed by convention to accept audit events");
+            log.info(e.getName() + ": assumed by convention to have an audit table");
         }
         return audited;
     }
 
-    /**
+    private boolean hasAuditTable() {
+    	String auditTableName = (e.getTableName()+"_AUD").toUpperCase() ;
+    	Map<String, Table> tablesByName = e.getConfig().getMetadata().getTablesByName();
+		Table table = tablesByName.get(auditTableName) ;
+		boolean hasAuditTable = false ;
+   		hasAuditTable = table != null 
+   				&& table.getColumnByName("REV") != null ;
+   		if (!e.hasInheritance()) {
+   			hasAuditTable = hasAuditTable && table.getColumnByName("REVTYPE") != null ;
+   		}
+		return hasAuditTable ;
+
+	}
+
+	/**
      * Is this entity the 'audit log' entity?
      */
     private AuditEntityAttribute attributes(Entity e) {

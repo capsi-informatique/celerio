@@ -257,7 +257,11 @@ public class JpaEntity extends AbstractEntitySpi {
             StringBuffer annotation = new StringBuffer("");
             appendAttribute(annotation, getCatalog());
             appendAttribute(annotation, getSchema());
-            appendAttribute(annotation, getName());
+			String tName = getName() ;
+			if (tName.contains(".")) {
+				tName = "\""+ tName + "\"" ;
+			}
+            appendAttribute(annotation, tName);
             appendAttribute(annotation, getUniqueConstraints());
             addImport("javax.persistence.Table");
             return appendComment("@Table(" + annotation + ")");

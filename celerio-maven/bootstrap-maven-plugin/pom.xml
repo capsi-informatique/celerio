@@ -19,7 +19,8 @@
     <parent>
         <groupId>com.jaxio.celerio</groupId>
         <artifactId>celerio-maven</artifactId>
-        <version>4.0.24-SNAPSHOT</version>
+        <version>4.0.24-envers-capsi</version>
+
     </parent>
     <artifactId>bootstrap-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
